@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Llanes Wedding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;700&display=swap');
+        
+        .wavy {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            animation: wave 3s ease-in-out infinite;
+        }
+
+        .wavy-date {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #10b981;
+            animation: waveDate 3s ease-in-out infinite;
+        }
+
+        .wavy-subtle {
+            animation: waveSubtle 3s ease-in-out infinite;
+        }
+
+        .wavy-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.875rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            font-style: italic;
+        }
+
+        .wavy-title-sm {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.95rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            font-style: italic;
+        }
+
+        .semi-circle {
+            width: 100%;
+            height: 150px;
+            background-color: #f0fdf4;
+            border-radius: 50% 50% 0 0;
+            margin-top: -1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes waveDate {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes waveSubtle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* Envelope Animation Styles */
+        .envelope-container {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+              backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.1);
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+            overflow: hidden;
+        }
+
+        .envelope-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('video.mp4') center/cover no-repeat;
+            background-attachment: fixed;
+            filter: blur(12px);
+            transition: filter 0.8s ease-out;
+            z-index: 1;
+        }
+
+        .envelope-container.opened::before {
+            filter: blur(0px);
+        }
+
+        .envelope-container.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .envelope {
+            width: 100%;
+            max-width: 400px;
+            height: 280px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            perspective: 1000px;
+            margin: 20px;
+            z-index: 10;
+        }
+
+        .envelope:hover {
+            transform: scale(1.03);
+        }
+
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #e5e7eb;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            top: 0;
+            left: 0;
+            transform-origin: top center;
+            transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .envelope.opening .envelope-flap {
+            transform: rotateX(120deg);
+        }
+
+        .envelope-content {
+            text-align: center;
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 0.5s ease-out 0.4s;
+            padding: 40px 30px;
+        }
+
+        .envelope.opening .envelope-content {
+            opacity: 1;
+        }
+
+        .envelope-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            color: #1f2937;
+            line-height: 1.5;
+            letter-spacing: 0.02em;
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+
+        .envelope-subtext {
+            font-size: 0.9rem;
+            color: #10b981;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 600;
+            animation: fadeInScale 0.6s ease-out 0.6s both;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Music Control Styles */
+        .music-control {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 40;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            transform: translateY(120px) scale(0.8);
+        }
+
+        .music-control.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .music-control:hover {
+            background: #10b981;
+            box-shadow: 0 10px 24px rgba(16, 185, 129, 0.4);
+            transform: scale(1.1);
+        }
+
+        .music-control:hover svg {
+            color: white;
+        }
+
+        .music-control svg {
+            width: 32px;
+            height: 32px;
+            color: #10b981;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% { 
+                transform: scale(1.15);
+                opacity: 0.8;
+            }
+        }
+
+        .music-control.playing {
+            animation: musicPulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes envelopeFadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+        }
+
+        .envelope.fading {
+            animation: envelopeFadeOut 5s ease-out 5s forwards;
+        }
+
+        @media (max-width: 640px) {
+            .envelope {
+                max-width: 90vw;
+                height: 240px;
+            }
+
+            .envelope-text {
+                font-size: 1.25rem;
+            }
+
+            .envelope-subtext {
+                font-size: 0.8rem;
+            }
+
+            .music-control {
+                width: 52px;
+                height: 52px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .music-control svg {
+                width: 28px;
+                height: 28px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#f0fdf4]">
+    <!-- Envelope Entry Experience -->
+    <div id="envelopeContainer" class="envelope-container">
+        <div class="envelope" id="envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-front">
+                <div class="envelope-content">
+                    <div class="envelope-text">
+                        Enter<br>Christian & Cris Ann Jelyn<br>Wedding
+                    </div>
+                    <div class="envelope-subtext">Tap to Begin with Music</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Music Control -->
+    <div id="musicControl" class="music-control" title="Toggle Music">
+        <svg id="musicIcon" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5h-2v-2h2l5-5v12zm6-6c0-2.76-2.24-5-5-5v2c1.66 0 3 1.34 3 3s-1.34 3-3 3v2c2.76 0 5-2.24 5-5z"/>
+        </svg>
+    </div>
+
+    <!-- Hidden Audio Element -->
+    <audio id="bgMusic" preload="auto" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Video Section - Fixed -->
+    <div class="relative h-screen w-full overflow-hidden">
+        <video 
+            autoplay 
+            muted 
+            loop 
+            class="absolute inset-0 w-full h-full object-cover"
+        >
+            <source src="video.mp4" type="video/mp4">
+            <!-- Add fallback image if video doesn't load -->
+            <img src="fallback-image.jpg" alt="Wedding Background" class="absolute inset-0 w-full h-full object-cover">
+        </video>
+
+        <!-- Navigation -->
+        <nav class="sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Mobile menu button -->
+                    <button id="menuBtn" class="md:hidden p-2 rounded-lg hover:bg-white/20 transition-colors">
+                        <svg id="hamburgerIcon" class="w-6 h-6 text-emerald-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Desktop menu -->
+                    <div class="hidden md:flex gap-8">
+                        <a href="#welcome" class="text-white hover:text-emerald-200 transition-colors font-medium">Venue & Details</a>
+                        <a href="#entourage" class="text-white hover:text-emerald-200 transition-colors font-medium">Wedding Entourage</a>
+                        <a href="#details" class="text-white hover:text-emerald-200 transition-colors font-medium">Finer Details</a>
+                        <a href="#rsvp" class="text-white hover:text-emerald-200 transition-colors font-medium">RSVP</a>
+                        <a href="#gallery" class="text-white hover:text-emerald-200 transition-colors font-medium">Gallery</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Mobile Side Navigation -->
+        <div id="mobileOverlay" class="hidden fixed inset-0 bg-black/50 z-30 md:hidden transition-opacity duration-300"></div>
+        <div id="mobileMenu" class="hidden fixed left-0 top-0 h-full w-64 bg-white z-40 md:hidden transform -translate-x-full transition-transform duration-300 ease-in-out">
+            <div class="p-6">
+                <button id="closeBtn" class="absolute top-4 right-4 p-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                <nav class="mt-8 space-y-4">
+                    <a href="#welcome" class="block py-3 px-4 text-gray-700 hover:bg-emerald-100/50 rounded-lg transition-all duration-200 transform hover:translate-x-2">Venue & Details</a>
+                    <a href="#entourage" class="block py-3 px-4 text-gray-700 hover:bg-emerald-100/50 rounded-lg transition-all duration-200 transform hover:translate-x-2">Wedding Entourage</a>
+                    <a href="#details" class="block py-3 px-4 text-gray-700 hover:bg-emerald-100/50 rounded-lg transition-all duration-200 transform hover:translate-x-2">Finer Details</a>
+                    <a href="#rsvp" class="block py-3 px-4 text-gray-700 hover:bg-emerald-100/50 rounded-lg transition-all duration-200 transform hover:translate-x-2">RSVP</a>
+                    <a href="#gallery" class="block py-3 px-4 text-gray-700 hover:bg-emerald-100/50 rounded-lg transition-all duration-200 transform hover:translate-x-2">Gallery</a>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Content over video -->
+        <div class="relative z-10 flex items-center justify-center h-full -mt-16">
+            <div class="text-center">
+                <p class="text-gray-100 text-sm mb-4 font-medium tracking-wide wavy-subtle -mt-20">By the grace of God and with<br> the blessing of our families</p>
+                <p class="text-gray-100 text-sm mb-4 font-medium tracking-wide wavy-subtle">We,</p>
+                <h1 class="wavy mb-10">Christian & Cris Ann Jelyn</h1>
+                <p class="text-gray-100 text-sm mb-4 font-medium tracking-wide wavy-subtle ">Cordially invite you to join us as we celebrate the sacrament of matrimony on</p>
+            </div>
+        </div>
+
+        <!-- Semi-circle divider -->
+        <div class="semi-circle absolute bottom-0 left-0 right-0 z-20 flex-col ">
+            <p class="wavy-date -mt-4"> December 12, 2025</p>
+            <p class="wavy-date -mt-16"> Friday, 2:00 PM,</p>            
+            
+        </div>
+    </div>
+
+    <!-- Rest of your content sections would go here -->
+    <section id="welcome" class="min-h-screen -mt-10 bg-[#f0fdf4] py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800" style="font-family: 'Playfair Display', serif;">Venue & Details</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Ceremony -->
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="text-center mb-6">
+                        <h3 class="wavy-title text-emerald-600 mb-2 text-lg">Ceremony</h3>
+                        <div class="w-16 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent mx-auto"></div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="border-l-2 border-emerald-200 pl-3">
+                            <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-0.5">Venue</p>
+                            <p class="wavy-title text-gray-800 text-base">Santuario De San Roque Church</p>
+                        </div>
+                        <div class="border-l-2 border-emerald-200 pl-3">
+                            <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-0.5">Time</p>
+                            <p class="wavy-title text-gray-800 text-base">2:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reception -->
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="text-center mb-6">
+                        <h3 class="wavy-title text-emerald-600 mb-2 text-lg">Reception</h3>
+                        <div class="w-16 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent mx-auto"></div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="border-l-2 border-emerald-200 pl-3">
+                            <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-0.5">Venue</p>
+                            <p class="wavy-title text-gray-800 text-base">Astoria Regency Glass House</p>
+                        </div>
+                        <div class="border-l-2 border-emerald-200 pl-3">
+                            <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-0.5">Time</p>
+                            <p class="wavy-title text-gray-800 text-base">5:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wedding Entourage Section -->
+    <section id="entourage" class="min-h-screen bg-[#f0fdf4]  -mt-10 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-800" style="font-family: 'Playfair Display', serif;">Wedding Entourage</h2>
+            
+            <!-- Parents Section -->
+            <div class="mb-16 -mt-5" >
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">Parents of the Groom</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-2 text-center">
+                            <p class="wavy-title text-gray-800 text-lg">Mr. Nathaniel T. Llanes</p>
+                            <p class="wavy-title text-gray-800 text-lg">Mrs. Rizza Jeanne T. Llanes</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">Parents of the Bride</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-2 text-center">
+                            <p class="wavy-title text-gray-800 text-lg">Mr. Gilbert A. Magtagad</p>
+                            <p class="wavy-title text-gray-800 text-lg">Mrs. Jonalin A. Magtagad</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Principal Sponsors Section -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold text-center mb-8 text-gray-700 -mt-5" style="font-family: 'Playfair Display', serif;">Principal Sponsors</h3>
+                <div class="bg-white rounded-lg shadow-md p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Ret. Gen. Ramon Ochotorena</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Joselito Madroñal</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Joel Fernando</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Hon. Bong Atilano</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Benhur Asid</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Mr. Junior Aguilar</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Mario Ritchie Hibionada</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Fredelino San Juan</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Adrian Semorlan</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Mr. Ariel Onessa</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Mr. Joel Enriquez</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Victor Z. Pagal</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Ma. Carla A. Ochotorena</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Ma. Blancaflor R. Jimeno</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Almira Nochefranca</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Cecilia C. Atilano</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Luningning Misuarez-Umar</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Ms. Nora Jean Aguilar</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Ms. Ruth Leah L. Hernan</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Ms. Rea Minor Asagara</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Ms. Vanessa Olaguera</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Ms. Lina R. Buck</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Ms. Deogene Dela Peña</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="wavy-title-sm text-gray-800">Mrs. Gladess A. Pagal</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Best Man & Maid of Honor Section -->
+            <div class="mb-16 -mt-5" >
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-lg shadow-md p-8">
+                        <div class="text-center">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">Best Man</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto mb-4"></div>
+                            <p class="wavy-title-sm text-gray-800">Atty. Christopher John T. Llanes</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-8">
+                        <div class="text-center">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">Maid of Honor</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto mb-4"></div>
+                            <p class="wavy-title-sm text-gray-800">Ms. Cris Antoniette Paghubasan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secondary Sponsors Section -->
+            <div class="mb-16 -mt-5" >
+                <h3 class="text-3xl font-bold text-center mb-8 text-gray-700" style="font-family: 'Playfair Display', serif;">Secondary Sponsors</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">To light up our Path</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-2 text-center">
+                            <p class="wavy-title-sm text-gray-800">Mr. Julius Rey Longhas</p>
+                            <p class="wavy-title-sm text-gray-800">Mrs. Nenita P. Longhas</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">To clothe us as one</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-2 text-center">
+                            <p class="wavy-title-sm text-gray-800">Mr. Niño Salvador S. Bondoc</p>
+                            <p class="wavy-title-sm text-gray-800">Mrs. Maria Rhodora B. Bondoc</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">To bind us together</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-2 text-center">
+                            <p class="wavy-title-sm text-gray-800">Mr. Norman Lloyd B. Manginsay</p>
+                            <p class="wavy-title-sm text-gray-800">Mrs. Ruth May G. Manginsay</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Groomsmen & Bridesmaids Section -->
+            <div class="mb-16">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Groomsmen -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">Groomsmen</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-3 text-center">
+                            <p class="wavy-title-sm text-gray-800">Dr. Arvin Joey Romo</p>
+                            <p class="wavy-title-sm text-gray-800">Mr. Crisanto Cipriano</p>
+                            <p class="wavy-title-sm text-gray-800">Mr. Leiran Ochotorena</p>
+                            <p class="wavy-title-sm text-gray-800">Mr. Crisdan Matthew T. Llanes</p>
+                            <p class="wavy-title-sm text-gray-800">Mr. Guiller Ellomer</p>
+                            <p class="wavy-title-sm text-gray-800">Mr. Levie G. Tejada</p>
+                            <p class="wavy-title-sm text-gray-800">Mr. Billy Jean Martin</p>
+                            <p class="wavy-title-sm text-gray-800">Mr. Lowie Paghubasan</p>
+                        </div>
+                    </div>
+
+                    <!-- Bridesmaids -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">Bridesmaids</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-3 text-center">
+                            <p class="wavy-title-sm text-gray-800">Ms. Barbie Shaixen Cagulada</p>
+                            <p class="wavy-title-sm text-gray-800">Ms. Criselda Lordgie Paghubasan</p>
+                            <p class="wavy-title-sm text-gray-800">Ms. Marilyn Atazan</p>
+                            <p class="wavy-title-sm text-gray-800">Ms. Bheanette Jewel Abo-Abo</p>
+                            <p class="wavy-title-sm text-gray-800">Ms. Ericka Magtagad</p>
+                            <p class="wavy-title-sm text-gray-800">Ms. Camille Therese Hernan</p>
+                            <p class="wavy-title-sm text-gray-800">Ms. Estella P. Olimpon</p>
+                            <p class="wavy-title-sm text-gray-800">Ms. Christine F. Gispert</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ring Bearer & Coin Bearer Section -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold text-center mb-8 text-gray-700" style="font-family: 'Playfair Display', serif;">Special Roles</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">To carry our symbol of love, treasure, and faith</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-2 text-center">
+                            <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-2">Ring Bearer</p>
+                            <p class="wavy-title-sm text-gray-800">Mczayne Gallon</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">To carry our symbol of love, treasure, and faith</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-2 text-center">
+                            <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-2">Coin Bearer</p>
+                            <p class="wavy-title-sm text-gray-800">Cris Dwayne Kurt Adjibun</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">To carry our symbol of love, treasure, and faith</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-2 text-center">
+                            <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-2">Bible Bearer</p>
+                            <p class="wavy-title-sm text-gray-800">Prinz Aezrillezyr Gantalao</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Little Groomsmen, Bridesmaids & Flower Girls Section -->
+            <div class="mb-16">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Little Groomsmen -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">Little Groomsmen</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-3 text-center">
+                            <p class="wavy-title-sm text-gray-800">Chrisniel Isaac T. Llanes</p>
+                            <p class="wavy-title-sm text-gray-800">Raine Enzo Kiel Bacalso</p>
+                            <p class="wavy-title-sm text-gray-800">Ameer Fareed S. Aguilar</p>
+                        </div>
+                    </div>
+
+                    <!-- Little Bridesmaids & Flower Girls -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">Little Bridesmaid</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-2 text-center">
+                            <p class="wavy-title-sm text-gray-800">Ms. Cris Alania P. Magtagad</p>
+                        </div>
+                    </div>
+
+                    <!-- Flower Girls -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-center mb-6">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">Flower Girls</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
+                        </div>
+                        <div class="space-y-3 text-center">
+                            <p class="wavy-title-sm text-gray-800">Journey Nethalia Longhas</p>
+                            <p class="wavy-title-sm text-gray-800">Nadeen Aguilar</p>
+                            <p class="wavy-title-sm text-gray-800">Pilarica Marie Altamia</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Finer Details Section -->
+    <section id="details" class="py-12 bg-white px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-light text-gray-800 mb-4" style="font-family: 'Playfair Display', serif; letter-spacing: -0.02em;">Finer Details</h2>
+                <div class="w-20 h-px bg-emerald-400 mx-auto"></div>
+            </div>
+            
+            <!-- Attire Guide -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <!-- Attire Information Card -->
+                <div class="bg-gradient-to-br from-gray-50 to-white rounded-xl shadow-md p-8 border border-gray-100 hover:shadow-lg transition-all duration-300">
+                    <h3 class="text-2xl font-light text-gray-800 mb-6 text-center" style="font-family: 'Playfair Display', serif;">Attire Guide</h3>
+                    <div class="space-y-4">
+                        <div class="bg-white rounded-lg p-5 border-l-3 border-emerald-400">
+                            <p class="text-xs text-emerald-600 uppercase tracking-widest font-semibold mb-2">Dress Code</p>
+                            <p class="text-gray-800 font-light italic" style="font-family: 'Playfair Display', serif;">Strictly Semiformal/Formal Attire</p>
+                        </div>
+                        <div class="bg-white rounded-lg p-5 border-l-3 border-emerald-400">
+                            <p class="text-xs text-emerald-600 uppercase tracking-widest font-semibold mb-2">Color Palette</p>
+                            <p class="text-gray-700 text-sm leading-relaxed">We encourage you to dress according to our wedding color palette to create a cohesive and elegant celebration.</p>
+                                        <div class="">
+                    <img src="img 2.png" alt="Wedding Attire Guide" class="w-full h-auto object-cover">
+                </div>
+                </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Wishing Well Section -->
+    <section id="wishing-well" class="py-14 bg-gray-50 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-5xl font-light text-gray-800 mb-3" style="font-family: 'Playfair Display', serif; font-style: italic; letter-spacing: -0.02em;">Wishing Well</h2>
+                <div class="w-16 h-px bg-emerald-400 mx-auto"></div>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-10 border border-gray-100">
+                <p class="text-center text-gray-700 text-base leading-relaxed italic font-light" style="letter-spacing: 0.01em;">With all that we have, we are truly blessed. Your presence and prayer are all that we request, but if you desire to give nonetheless, monetary gift is the one we suggest.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Unplugged Ceremony Section -->
+    <section id="unplugged" class="py-14 bg-white px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-5xl font-light text-gray-800 mb-3" style="font-family: 'Playfair Display', serif; font-style: italic; letter-spacing: -0.02em;">Unplugged Ceremony</h2>
+                <div class="w-16 h-px bg-emerald-400 mx-auto"></div>
+            </div>
+            <div class="bg-gray-50 rounded-xl shadow-md p-10 border border-gray-100">
+                <p class="text-center text-gray-700 text-base leading-relaxed italic font-light" style="letter-spacing: 0.01em;">We have invited a team to help us capture this day so just be present and keep our ceremony camera free just until we say <span class="font-semibold text-gray-800">"I Do"</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- RSVP Section -->
+    <section id="rsvp" class="py-14 bg-gray-50 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-5xl font-light text-gray-800 mb-3" style="font-family: 'Playfair Display', serif; font-style: italic; letter-spacing: -0.02em;">RSVP</h2>
+                <div class="w-16 h-px bg-emerald-400 mx-auto"></div>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-10 border border-gray-100">
+                <div class="space-y-5 text-center">
+                    <p class="text-gray-700 text-base italic font-light" style="letter-spacing: 0.01em;">We have reserved <span class="font-semibold text-gray-800">_____</span> seat/s</p>
+                    <div class="border-t border-gray-200 pt-5">
+                        <p class="text-gray-700 text-base italic font-light" style="letter-spacing: 0.01em;">The favor of your reply is requested on or before <span class="font-semibold text-gray-800">November 29, 2025</span></p>
+                    </div>
+                    <div class="border-t border-gray-200 pt-5">
+                        <p class="text-gray-700 text-base italic font-light" style="letter-spacing: 0.01em;">Kindly contact us thru <span class="font-semibold text-gray-800">SMS or FB/Messenger</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reminders Section -->
+    <section id="reminders" class="py-14 bg-white px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-5xl font-light text-gray-800 mb-3" style="font-family: 'Playfair Display', serif; font-style: italic; letter-spacing: -0.02em;">Reminders</h2>
+                <div class="w-16 h-px bg-emerald-400 mx-auto"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="bg-gradient-to-br from-emerald-50 to-gray-50 rounded-xl shadow-md p-7 border border-emerald-100 hover:shadow-lg hover:border-emerald-300 transition-all duration-300">
+                    <p class="text-center text-lg font-light text-gray-800 italic" style="font-family: 'Playfair Display', serif; letter-spacing: 0.01em;">Be on time</p>
+                </div>
+                <div class="bg-gradient-to-br from-emerald-50 to-gray-50 rounded-xl shadow-md p-7 border border-emerald-100 hover:shadow-lg hover:border-emerald-300 transition-all duration-300">
+                    <p class="text-center text-lg font-light text-gray-800 italic" style="font-family: 'Playfair Display', serif; letter-spacing: 0.01em;">Finish the event</p>
+                </div>
+                <div class="bg-gradient-to-br from-emerald-50 to-gray-50 rounded-xl shadow-md p-7 border border-emerald-100 hover:shadow-lg hover:border-emerald-300 transition-all duration-300">
+                    <p class="text-center text-lg font-light text-gray-800 italic" style="font-family: 'Playfair Display', serif; letter-spacing: 0.01em;">Be blessed</p>
+                </div>
+                <div class="bg-gradient-to-br from-emerald-50 to-gray-50 rounded-xl shadow-md p-7 border border-emerald-100 hover:shadow-lg hover:border-emerald-300 transition-all duration-300">
+                    <p class="text-center text-lg font-light text-gray-800 italic" style="font-family: 'Playfair Display', serif; letter-spacing: 0.01em;">& Have fun</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Envelope Entry Logic
+        const envelope = document.getElementById('envelope');
+        const envelopeContainer = document.getElementById('envelopeContainer');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicControl = document.getElementById('musicControl');
+        let musicPlaying = false;
+
+        function openEnvelope() {
+            envelope.classList.add('opening');
+            envelopeContainer.classList.add('opened');
+            
+            // Start music with error handling
+            const playPromise = bgMusic.play();
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        musicPlaying = true;
+                        musicControl.classList.add('playing');
+                    })
+                    .catch(err => console.log('Music play failed:', err));
+            }
+
+            // Hide envelope and reveal content
+            setTimeout(() => {
+                envelopeContainer.classList.add('hidden');
+                musicControl.classList.add('visible');
+            }, 1400);
+        }
+
+        // Envelope click handler
+        envelope.addEventListener('click', openEnvelope);
+
+        // Keyboard support
+        document.addEventListener('keydown', function(e) {
+            if ((e.key === 'Enter' || e.key === ' ') && !envelopeContainer.classList.contains('hidden')) {
+                e.preventDefault();
+                openEnvelope();
+            }
+        });
+
+        // Music Control Toggle
+        musicControl.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicControl.classList.remove('playing');
+                musicPlaying = false;
+            } else {
+                bgMusic.play()
+                    .then(() => {
+                        musicControl.classList.add('playing');
+                        musicPlaying = true;
+                    })
+                    .catch(err => console.log('Music play failed:', err));
+            }
+        });
+
+        // Menu functionality
+        const menuBtn = document.getElementById('menuBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        function openMenu() {
+            mobileMenu.classList.remove('hidden');
+            setTimeout(() => {
+                mobileMenu.classList.remove('-translate-x-full');
+            }, 10);
+            mobileOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            mobileMenu.classList.add('-translate-x-full');
+            mobileOverlay.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            setTimeout(() => mobileMenu.classList.add('hidden'), 300);
+        }
+
+        menuBtn.addEventListener('click', openMenu);
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeMenu();
+            });
+        }
+        
+        mobileOverlay.addEventListener('click', closeMenu);
+
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                closeMenu();
+            });
+        });
+    </script>
+</body>
+</html>
