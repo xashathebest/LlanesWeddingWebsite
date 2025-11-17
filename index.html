@@ -8,6 +8,10 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;700&display=swap');
         
+        html {
+            scroll-behavior: smooth;
+        }
+
         .wavy {
             font-family: 'Playfair Display', serif;
             font-size: 3.5rem;
@@ -104,6 +108,7 @@
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .envelope {
@@ -115,10 +120,15 @@
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
             position: relative;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
             perspective: 1000px;
             margin: 20px;
             z-index: 10;
+        }
+
+        .envelope-container.hidden .envelope {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
         }
 
         .envelope:hover {
@@ -149,6 +159,35 @@
             transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
             z-index: 10;
             border-radius: 12px 12px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .envelope-flap::before {
+            content: "You're Invited";
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: white;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .envelope-flap::after {
+            content: "Tap to Begin with Music";
+            display: block;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 500;
+            text-align: center;
         }
 
         .envelope.opening .envelope-flap {
@@ -271,6 +310,23 @@
             animation: envelopeFadeOut 5s ease-out 5s forwards;
         }
 
+        .envelope-heart {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 8;
+            opacity: 1;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .envelope.opening .envelope-heart {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+
         @media (max-width: 640px) {
             .envelope {
                 max-width: 90vw;
@@ -305,11 +361,14 @@
         <div class="envelope" id="envelope">
             <div class="envelope-flap"></div>
             <div class="envelope-front">
+                <svg class="envelope-heart" viewBox="0 0 24 24" fill="#10b981">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
                 <div class="envelope-content">
                     <div class="envelope-text">
                         Enter<br>Christian & Cris Ann Jelyn<br>Wedding
                     </div>
-                    <div class="envelope-subtext">Tap to Begin with Music</div>
+
                 </div>
             </div>
         </div>
@@ -335,7 +394,7 @@
             loop 
             class="absolute inset-0 w-full h-full object-cover"
         >
-            <source src="video.mp4" type="video/mp4">
+            <source src="video.webm" type="video/webm">
             <!-- Add fallback image if video doesn't load -->
             <img src="fallback-image.jpg" alt="Wedding Background" class="absolute inset-0 w-full h-full object-cover">
         </video>
@@ -352,13 +411,15 @@
                     </button>
 
                     <!-- Desktop menu -->
-                    <div class="hidden md:flex gap-8">
-                        <a href="#welcome" class="text-white hover:text-emerald-200 transition-colors font-medium">Venue & Details</a>
-                        <a href="#entourage" class="text-white hover:text-emerald-200 transition-colors font-medium">Wedding Entourage</a>
-                        <a href="#details" class="text-white hover:text-emerald-200 transition-colors font-medium">Finer Details</a>
-                        <a href="#rsvp" class="text-white hover:text-emerald-200 transition-colors font-medium">RSVP</a>
-                        <a href="#gallery" class="text-white hover:text-emerald-200 transition-colors font-medium">Gallery</a>
-                    </div>
+                        <div class="hidden md:flex gap-8">
+                            <a href="#welcome" class="text-white hover:text-emerald-200 transition-colors font-medium">Venue & Details</a>
+                            <a href="#entourage" class="text-white hover:text-emerald-200 transition-colors font-medium">Wedding Entourage</a>
+                            <a href="#details" class="text-white hover:text-emerald-200 transition-colors font-medium">Finer Details</a>
+                            <a href="#rsvp" class="text-white hover:text-emerald-200 transition-colors font-medium">RSVP</a>
+                            <a href="#gallery" class="text-white hover:text-emerald-200 transition-colors font-medium">Gallery</a>
+                        </div>
+        
+
                 </div>
             </div>
         </nav>
@@ -385,10 +446,10 @@
         <!-- Content over video -->
         <div class="relative z-10 flex items-center justify-center h-full -mt-16">
             <div class="text-center">
-                <p class="text-gray-100 text-sm mb-4 font-medium tracking-wide wavy-subtle -mt-20">By the grace of God and with<br> the blessing of our families</p>
-                <p class="text-gray-100 text-sm mb-4 font-medium tracking-wide wavy-subtle">We,</p>
+                <p class="text-gray-100 text-sm mb-4 font-medium tracking-wide wavy-subtle -mt-20" style="font-family: 'Playfair Display', serif; text-shadow: 4px 4px 16px rgba(0, 0, 0, 0.9), 2px 2px 8px rgba(0, 0, 0, 0.7), 0px 0px 12px rgba(0, 0, 0, 0.8);">By the grace of God and with<br> the blessing of our families</p>
+                <p class="text-gray-100 text-sm mb-4 font-medium tracking-wide wavy-subtle" style="font-family: 'Playfair Display', serif; text-shadow: 4px 4px 16px rgba(0, 0, 0, 0.9), 2px 2px 8px rgba(0, 0, 0, 0.7), 0px 0px 12px rgba(0, 0, 0, 0.8);">We,</p>
                 <h1 class="wavy mb-10">Christian & Cris Ann Jelyn</h1>
-                <p class="text-gray-100 text-sm mb-4 font-medium tracking-wide wavy-subtle ">Cordially invite you to join us as we celebrate the sacrament of matrimony on</p>
+                <p class="text-gray-100 text-sm mb-4 font-medium tracking-wide wavy-subtle" style="font-family: 'Playfair Display', serif; text-shadow: 4px 4px 16px rgba(0, 0, 0, 0.9), 2px 2px 8px rgba(0, 0, 0, 0.7), 0px 0px 12px rgba(0, 0, 0, 0.8);">Cordially invite you to join us as we celebrate the sacrament of matrimony on</p>
             </div>
         </div>
 
@@ -401,9 +462,10 @@
     </div>
 
     <!-- Rest of your content sections would go here -->
-    <section id="welcome" class="min-h-screen -mt-10 bg-[#f0fdf4] py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800" style="font-family: 'Playfair Display', serif;">Venue & Details</h2>
+    <section id="welcome" class="min-h-screen bg-[#f0fdf4]  px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto ">
+
+            <h2  class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800" style="font-family: 'Playfair Display', serif;">Venue & Details</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Ceremony -->
@@ -446,12 +508,12 @@
     </section>
 
     <!-- Wedding Entourage Section -->
-    <section id="entourage" class="min-h-screen bg-[#f0fdf4]  -mt-10 px-4 sm:px-6 lg:px-8">
+    <section id="entourage" class="min-h-screen bg-[#f0fdf4] -mt-28  px-4 sm:px-6 lg:px-8">
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-800" style="font-family: 'Playfair Display', serif;">Wedding Entourage</h2>
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-10 text-gray-800" style="font-family: 'Playfair Display', serif;">Wedding Entourage</h2>
             
             <!-- Parents Section -->
-            <div class="mb-16 -mt-5" >
+            <div class="mb-16 " >
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
                         <div class="text-center mb-6">
