@@ -327,6 +327,26 @@
             transform: translate(-50%, -50%) scale(0.5);
         }
 
+                .vines-decoration {
+                    position: absolute;
+                    width: 200px;
+                    height: auto;
+                    top: 10px;
+                    left: -80px;
+                    transform: rotate(-15deg);
+                    opacity: 0.9;
+                    z-index: 5;
+                }
+                            .vines-decoration2 {
+                    position: absolute;
+                    width: 200px;
+                    height: auto;
+                    top: 100px;
+                    right: 0px;
+                    transform: rotate(-15deg);
+                    opacity: 0.9;
+                    z-index: 5;
+                }
         @media (max-width: 640px) {
             .envelope {
                 max-width: 90vw;
@@ -352,6 +372,24 @@
                 width: 28px;
                 height: 28px;
             }
+        }
+
+        /* Mobile Menu Overlay */
+        #mobileOverlay {
+            transition: opacity 0.3s ease-out;
+        }
+
+        #mobileOverlay.hidden {
+            pointer-events: none;
+        }
+
+        #mobileMenu {
+            will-change: transform;
+        }
+
+        #mobileMenu a {
+            position: relative;
+            z-index: 50;
         }
     </style>
 </head>
@@ -462,10 +500,11 @@
     </div>
 
     <!-- Rest of your content sections would go here -->
-    <section id="welcome" class="min-h-screen bg-[#f0fdf4]  px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto ">
+    <section id="welcome" class="min-h-screen bg-[#f0fdf4] px-4 sm:px-6 lg:px-8 relative">
+        <img src="img3.png" alt="Vines" class="vines-decoration">
 
-            <h2  class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800" style="font-family: 'Playfair Display', serif;">Venue & Details</h2>
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800" style="font-family: 'Playfair Display', serif;">Venue & Details</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Ceremony -->
@@ -487,8 +526,10 @@
                 </div>
 
                 <!-- Reception -->
+
                 <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                    <div class="text-center mb-6">
+                    <div class="text-center mb-6">                
+                        <img src="img3.png" alt="Vines" class="vines-decoration2" style="transform: scaleX(-1);">
                         <h3 class="wavy-title text-emerald-600 mb-2 text-lg">Reception</h3>
                         <div class="w-16 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent mx-auto"></div>
                     </div>
@@ -913,7 +954,6 @@
             envelope.classList.add('opening');
             envelopeContainer.classList.add('opened');
             
-            // Start music with error handling
             const playPromise = bgMusic.play();
             if (playPromise !== undefined) {
                 playPromise
@@ -924,17 +964,14 @@
                     .catch(err => console.log('Music play failed:', err));
             }
 
-            // Hide envelope and reveal content
             setTimeout(() => {
                 envelopeContainer.classList.add('hidden');
                 musicControl.classList.add('visible');
             }, 1400);
         }
 
-        // Envelope click handler
         envelope.addEventListener('click', openEnvelope);
 
-        // Keyboard support
         document.addEventListener('keydown', function(e) {
             if ((e.key === 'Enter' || e.key === ' ') && !envelopeContainer.classList.contains('hidden')) {
                 e.preventDefault();
@@ -942,7 +979,6 @@
             }
         });
 
-        // Music Control Toggle
         musicControl.addEventListener('click', function(e) {
             e.stopPropagation();
             if (musicPlaying) {
@@ -959,27 +995,52 @@
             }
         });
 
-        // Menu functionality
+        // Menu functionality - IMPROVED
         const menuBtn = document.getElementById('menuBtn');
         const closeBtn = document.getElementById('closeBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         const mobileOverlay = document.getElementById('mobileOverlay');
+        const menuLinks = document.querySelectorAll('#mobileMenu a[href^="#"]');
 
         function openMenu() {
             mobileMenu.classList.remove('hidden');
+            mobileOverlay.classList.remove('hidden');
             setTimeout(() => {
                 mobileMenu.classList.remove('-translate-x-full');
+                mobileOverlay.classList.add('opacity-100');
             }, 10);
-            mobileOverlay.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
 
         function closeMenu() {
             mobileMenu.classList.add('-translate-x-full');
-            mobileOverlay.classList.add('hidden');
+            mobileOverlay.classList.remove('opacity-100');
             document.body.style.overflow = 'auto';
-            setTimeout(() => mobileMenu.classList.add('hidden'), 300);
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+                mobileOverlay.classList.add('hidden');
+            }, 300);
         }
+
+        // Handle menu link clicks - scroll and close
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    // Close menu first
+                    closeMenu();
+                    
+                    // Then scroll to target after menu closes
+                    setTimeout(() => {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 300);
+                }
+            });
+        });
 
         menuBtn.addEventListener('click', openMenu);
         
@@ -990,13 +1051,10 @@
             });
         }
         
-        mobileOverlay.addEventListener('click', closeMenu);
-
-        document.querySelectorAll('#mobileMenu a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
+        mobileOverlay.addEventListener('click', function(e) {
+            if (e.target === mobileOverlay) {
                 closeMenu();
-            });
+            }
         });
     </script>
 </body>
