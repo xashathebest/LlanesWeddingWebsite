@@ -27,10 +27,15 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;700&family=Lora:ital@0;1&display=swap');
         
         html {
             scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            font-style: italic;
         }
 
         .wavy {
@@ -368,49 +373,77 @@
                     opacity: 0.9;
                     z-index: 5;
                 }
+
+        .vines-decoration-small {
+            position: absolute;
+            width: 120px;
+            height: auto;
+            opacity: 0.7;
+            z-index: 2;
+        }
+
+        .vines-decoration-tiny {
+            position: absolute;
+            width: 80px;
+            height: auto;
+            opacity: 0.6;
+            z-index: 1;
+        }
+
+        .vines-decoration-medium {
+            position: absolute;
+            width: 160px;
+            height: auto;
+            opacity: 0.75;
+            z-index: 3;
+        }
+
+        @media (max-width: 768px) {
+            .vines-decoration {
+                width: 120px;
+                left: -60px;
+            }
+
+            .vines-decoration2 {
+                width: 120px;
+                right: -20px;
+            }
+
+            .vines-decoration-small {
+                width: 80px;
+            }
+
+            .vines-decoration-tiny {
+                width: 60px;
+            }
+
+            .vines-decoration-medium {
+                width: 110px;
+            }
+        }
+
         @media (max-width: 640px) {
-            .envelope {
-                max-width: 90vw;
-                height: 240px;
+            .vines-decoration {
+                width: 80px;
+                left: -40px;
             }
 
-            .envelope-text {
-                font-size: 1.25rem;
+            .vines-decoration2 {
+                width: 80px;
+                right: -10px;
             }
 
-            .envelope-subtext {
-                font-size: 0.8rem;
+            .vines-decoration-small {
+                width: 60px;
             }
 
-            .music-control {
-                width: 52px;
-                height: 52px;
-                bottom: 20px;
-                right: 20px;
+            .vines-decoration-tiny {
+                width: 50px;
             }
 
-            .music-control svg {
-                width: 28px;
-                height: 28px;
+            .vines-decoration-medium {
+                width: 80px;
             }
-        }
-
-        /* Mobile Menu Overlay */
-        #mobileOverlay {
-            transition: opacity 0.3s ease-out;
-        }
-
-        #mobileOverlay.hidden {
-            pointer-events: none;
-        }
-
-        #mobileMenu {
-            will-change: transform;
-        }
-
-        #mobileMenu a {
-            position: relative;
-            z-index: 50;
         }
     </style>
 </head>
@@ -444,6 +477,9 @@
     <audio id="bgMusic" preload="auto" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
+
+    <!-- Sakura.js for Cherry Blossom Effect -->
+    <script src="https://cdn.jsdelivr.net/npm/sakura-js@1.3.1/sakura.min.js"></script>
 
     <!-- Video Section - Fixed -->
     <div class="relative h-screen w-full overflow-hidden bg-black">
@@ -529,6 +565,7 @@
     <!-- Rest of your content sections would go here -->
     <section id="welcome" class="min-h-screen bg-[#f0fdf4] px-4 sm:px-6 lg:px-8 relative">
         <img src="img3.png" alt="Vines" class="vines-decoration">
+        <img src="img3.png" alt="Vines" class="vines-decoration-small" style="bottom: 200px; right: 50px; transform: rotate(45deg) scaleX(-1);">
 
         <div class="max-w-4xl mx-auto">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800" style="font-family: 'Playfair Display', serif;">Venue & Details</h2>
@@ -543,11 +580,11 @@
                     <div class="space-y-4">
                         <div class="border-l-2 border-emerald-200 pl-3">
                             <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-0.5">Venue</p>
-                            <p class="wavy-title text-gray-800 text-base">Santuario De San Roque Church</p>
+                            <p class="wavy-title text-gray-800 text-base italic">Santuario De San Roque Church</p>
                         </div>
                         <div class="border-l-2 border-emerald-200 pl-3">
                             <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-0.5">Time</p>
-                            <p class="wavy-title text-gray-800 text-base">2:00 PM</p>
+                            <p class="wavy-title text-gray-800 text-base italic">2:00 PM</p>
                         </div>
                     </div>
                 </div>
@@ -563,11 +600,11 @@
                     <div class="space-y-4">
                         <div class="border-l-2 border-emerald-200 pl-3">
                             <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-0.5">Venue</p>
-                            <p class="wavy-title text-gray-800 text-base">Astoria Regency Glass House</p>
+                            <p class="wavy-title text-gray-800 text-base italic">Astoria Regency Glass House</p>
                         </div>
                         <div class="border-l-2 border-emerald-200 pl-3">
                             <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-0.5">Time</p>
-                            <p class="wavy-title text-gray-800 text-base">5:00 PM</p>
+                            <p class="wavy-title text-gray-800 text-base italic">5:00 PM</p>
                         </div>
                     </div>
                 </div>
@@ -576,7 +613,10 @@
     </section>
 
     <!-- Wedding Entourage Section -->
-    <section id="entourage" class="min-h-screen bg-[#f0fdf4] -mt-28  px-4 sm:px-6 lg:px-8">
+    <section id="entourage" class="min-h-screen bg-[#f0fdf4] -mt-28  px-4 sm:px-6 lg:px-8 relative">
+        <img src="img3.png" alt="Vines" class="vines-decoration-tiny" style="top: 100px; left: 20px; transform: rotate(20deg);">
+        <img src="img3.png" alt="Vines" class="vines-decoration-small" style="bottom: 150px; right: 30px; transform: rotate(-30deg) scaleX(-1);">
+
         <div class="max-w-6xl mx-auto">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-10 text-gray-800" style="font-family: 'Playfair Display', serif;">Wedding Entourage</h2>
             
@@ -589,8 +629,8 @@
                             <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
                         </div>
                         <div class="space-y-2 text-center">
-                            <p class="wavy-title text-gray-800 text-lg">Mr. Nathaniel T. Llanes</p>
-                            <p class="wavy-title text-gray-800 text-lg">Mrs. Rizza Jeanne T. Llanes</p>
+                            <p class="wavy-title text-gray-800 text-lg italic">Mr. Nathaniel T. Llanes</p>
+                            <p class="wavy-title text-gray-800 text-lg italic">Mrs. Rizza Jeanne T. Llanes</p>
                         </div>
                     </div>
                     <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
@@ -599,8 +639,8 @@
                             <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
                         </div>
                         <div class="space-y-2 text-center">
-                            <p class="wavy-title text-gray-800 text-lg">Mr. Gilbert A. Magtagad</p>
-                            <p class="wavy-title text-gray-800 text-lg">Mrs. Jonalin A. Magtagad</p>
+                            <p class="wavy-title text-gray-800 text-lg italic">Mr. Gilbert A. Magtagad</p>
+                            <p class="wavy-title text-gray-800 text-lg italic">Mrs. Jonalin A. Magtagad</p>
                         </div>
                     </div>
                 </div>
@@ -609,79 +649,81 @@
             <!-- Principal Sponsors Section -->
             <div class="mb-16">
                 <h3 class="text-3xl font-bold text-center mb-8 text-gray-700 -mt-5" style="font-family: 'Playfair Display', serif;">Principal Sponsors</h3>
-                <div class="bg-white rounded-lg shadow-md p-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg shadow-md p-8 relative">
+                    <img src="img3.png" alt="Vines" class="vines-decoration-medium" style="top: 30px; left: 20px; transform: rotate(-20deg);">
+                    <img src="img3.png" alt="Vines" class="vines-decoration-medium" style="bottom: 80px; right: 30px; transform: rotate(25deg) scaleX(-1);">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Ret. Gen. Ramon Ochotorena</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ret. Gen. Ramon M. Ochotorena</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Joselito Madroñal</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Joselito Madroñal</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Joel Fernando</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Joel Fernando</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Hon. Bong Atilano</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Hon. Elbert "Bong" Atilano</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Benhur Asid</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Benhur Asid</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Mr. Junior Aguilar</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Junior Aguilar</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Mario Ritchie Hibionada</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Mario Ritchie O. Hibionada</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Fredelino San Juan</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Fredelino M. San Juan</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Adrian Semorlan</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Adrian P. Semorlan</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Mr. Ariel Onessa</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Ariel Onesa</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Mr. Joel Enriquez</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Joel Enriquez</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Victor Z. Pagal</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Victor Z. Pagal</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Ma. Carla A. Ochotorena</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Ma. Carla A. Ochotorena</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Ma. Blancaflor R. Jimeno</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Ma. Blancaflor R. Jimeno</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Almira Nochefranca</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Almira E. Nochefranca</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Cecilia C. Atilano</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Cecilia C. Atilano</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Luningning Misuarez-Umar</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Luningning Misuarez-Umar</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Ms. Nora Jean Aguilar</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mrs. Nora Jean Aguilar</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Ms. Ruth Leah L. Hernan</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mrs. Ruth Leah L. Hernan</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Ms. Rea Minor Asagara</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Rhea M. Asagara</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Ms. Vanessa Olaguera</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Vanessa E. Olaguera</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Ms. Lina R. Buck</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Lina R. Buck</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Ms. Deogene Dela Peña</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Deogene DP. Flores</p>
                         </div>
                         <div class="text-center">
-                            <p class="wavy-title-sm text-gray-800">Mrs. Gladess A. Pagal</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mrs. Gladess A. Pagal</p>
                         </div>
                     </div>
                 </div>
@@ -694,11 +736,18 @@
                         <div class="text-center">
                             <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">Best Man</p>
                             <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto mb-4"></div>
-                            <p class="wavy-title-sm text-gray-800">Atty. Christopher John T. Llanes</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Atty. Christopher John T. Llanes</p>
                         </div>
                     </div>
                     <div class="bg-white rounded-lg shadow-md p-8">
                         <div class="text-center">
+                            <p class="text-xs text-emerald-500 uppercase tracking-widest font-light mb-3">Maid of Honor</p>
+                            <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto mb-4"></div>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Cris Ann Jelyn Magtagad</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Secondary Sponsors Section -->
             <div class="mb-16 -mt-5" >
@@ -710,8 +759,8 @@
                             <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
                         </div>
                         <div class="space-y-2 text-center">
-                            <p class="wavy-title-sm text-gray-800">Mr. Julius Rey Longhas</p>
-                            <p class="wavy-title-sm text-gray-800">Mrs. Nenita P. Longhas</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Julius Rey Longhas</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mrs. Nenita P. Longhas</p>
                         </div>
                     </div>
                     <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
@@ -720,8 +769,8 @@
                             <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
                         </div>
                         <div class="space-y-2 text-center">
-                            <p class="wavy-title-sm text-gray-800">Mr. Niño Salvador S. Bondoc</p>
-                            <p class="wavy-title-sm text-gray-800">Mrs. Maria Rhodora B. Bondoc</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Niño Salvador S. Bondoc</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mrs. Maria Rhodora B. Bondoc</p>
                         </div>
                     </div>
                     <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
@@ -730,8 +779,8 @@
                             <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
                         </div>
                         <div class="space-y-2 text-center">
-                            <p class="wavy-title-sm text-gray-800">Mr. Norman Lloyd B. Manginsay</p>
-                            <p class="wavy-title-sm text-gray-800">Mrs. Ruth May G. Manginsay</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Norman Lloyd B. Manginsay</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mrs. Ruth May G. Manginsay</p>
                         </div>
                     </div>
                 </div>
@@ -747,14 +796,14 @@
                             <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
                         </div>
                         <div class="space-y-3 text-center">
-                            <p class="wavy-title-sm text-gray-800">Dr. Arvin Joey Romo</p>
-                            <p class="wavy-title-sm text-gray-800">Mr. Crisanto Cipriano</p>
-                            <p class="wavy-title-sm text-gray-800">Mr. Leiran Ochotorena</p>
-                            <p class="wavy-title-sm text-gray-800">Mr. Crisdan Matthew T. Llanes</p>
-                            <p class="wavy-title-sm text-gray-800">Mr. Guiller Ellomer</p>
-                            <p class="wavy-title-sm text-gray-800">Mr. Levie G. Tejada</p>
-                            <p class="wavy-title-sm text-gray-800">Mr. Billy Jean Martin</p>
-                            <p class="wavy-title-sm text-gray-800">Mr. Lowie Paghubasan</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Dr. Arvin Joey Romo</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Crisanto Cipriano</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Leiran Ochotorena</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Crisdan Matthew T. Llanes</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Guiller Ellomer</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Levie G. Tejada</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Billy Jean Martin</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mr. Lowie Paghubasan</p>
                         </div>
                     </div>
 
@@ -765,14 +814,14 @@
                             <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
                         </div>
                         <div class="space-y-3 text-center">
-                            <p class="wavy-title-sm text-gray-800">Ms. Barbie Shaixen Cagulada</p>
-                            <p class="wavy-title-sm text-gray-800">Ms. Criselda Lordgie Paghubasan</p>
-                            <p class="wavy-title-sm text-gray-800">Ms. Marilyn Atazan</p>
-                            <p class="wavy-title-sm text-gray-800">Ms. Bheanette Jewel Abo-Abo</p>
-                            <p class="wavy-title-sm text-gray-800">Ms. Ericka Magtagad</p>
-                            <p class="wavy-title-sm text-gray-800">Ms. Camille Therese Hernan</p>
-                            <p class="wavy-title-sm text-gray-800">Ms. Estella P. Olimpon</p>
-                            <p class="wavy-title-sm text-gray-800">Ms. Christine F. Gispert</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Barbie Shaixen Cagulada</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Criselda Lordgie Paghubasan</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Marilyn Atazan</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Bheanette Jewel Abo-Abo</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Ericka Magtagad</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Camille Therese Hernan</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Estella P. Olimpon</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Christine F. Gispert</p>
                         </div>
                     </div>
                 </div>
@@ -789,7 +838,7 @@
                         </div>
                         <div class="space-y-2 text-center">
                             <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-2">Ring Bearer</p>
-                            <p class="wavy-title-sm text-gray-800">Mczayne Gallon</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Mczayne Gallon</p>
                         </div>
                     </div>
                     <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
@@ -799,7 +848,7 @@
                         </div>
                         <div class="space-y-2 text-center">
                             <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-2">Coin Bearer</p>
-                            <p class="wavy-title-sm text-gray-800">Cris Dwayne Kurt Adjibun</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Cris Dwayne Kurt Adjibun</p>
                         </div>
                     </div>
                     <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
@@ -809,7 +858,7 @@
                         </div>
                         <div class="space-y-2 text-center">
                             <p class="text-xs text-gray-500 uppercase tracking-widest font-light mb-2">Bible Bearer</p>
-                            <p class="wavy-title-sm text-gray-800">Prinz Aezrillezyr Gantalao</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Prinz Aezrillezyr Gantalao</p>
                         </div>
                     </div>
                 </div>
@@ -825,9 +874,9 @@
                             <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
                         </div>
                         <div class="space-y-3 text-center">
-                            <p class="wavy-title-sm text-gray-800">Chrisniel Isaac T. Llanes</p>
-                            <p class="wavy-title-sm text-gray-800">Raine Enzo Kiel Bacalso</p>
-                            <p class="wavy-title-sm text-gray-800">Ameer Fareed S. Aguilar</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Chrisniel Isaac T. Llanes</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Raine Enzo Kiel Bacalso</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ameer Fareed S. Aguilar</p>
                         </div>
                     </div>
 
@@ -838,7 +887,7 @@
                             <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
                         </div>
                         <div class="space-y-2 text-center">
-                            <p class="wavy-title-sm text-gray-800">Ms. Cris Alania P. Magtagad</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Ms. Cris Alania P. Magtagad</p>
                         </div>
                     </div>
 
@@ -849,9 +898,9 @@
                             <div class="w-12 h-0.5 bg-gradient-to-r from-transparent via-emerald-300 to-transparent mx-auto"></div>
                         </div>
                         <div class="space-y-3 text-center">
-                            <p class="wavy-title-sm text-gray-800">Journey Nethalia Longhas</p>
-                            <p class="wavy-title-sm text-gray-800">Nadeen Aguilar</p>
-                            <p class="wavy-title-sm text-gray-800">Pilarica Marie Altamia</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Journey Nethalia Longhas</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Nadeen Aguilar</p>
+                            <p class="wavy-title-sm text-gray-800 italic">Pilarica Marie Altamia</p>
                         </div>
                     </div>
                 </div>
@@ -860,7 +909,10 @@
     </section>
 
     <!-- Finer Details Section -->
-    <section id="details" class="py-12 bg-white px-4 sm:px-6 lg:px-8">
+    <section id="details" class="py-12 bg-white px-4 sm:px-6 lg:px-8 relative">
+        <img src="img3.png" alt="Vines" class="vines-decoration-small" style="top: 50px; left: 40px; transform: rotate(-20deg);">
+        <img src="img3.png" alt="Vines" class="vines-decoration-tiny" style="bottom: 100px; right: 60px; transform: rotate(15deg) scaleX(-1);">
+
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-4xl md:text-5xl font-light text-gray-800 mb-4" style="font-family: 'Playfair Display', serif; letter-spacing: -0.02em;">Finer Details</h2>
@@ -892,7 +944,10 @@
     </section>
 
     <!-- Wishing Well Section -->
-    <section id="wishing-well" class="py-14 bg-gray-50 px-4 sm:px-6 lg:px-8">
+    <section id="wishing-well" class="py-14 bg-gray-50 px-4 sm:px-6 lg:px-8 relative">
+        <img src="img3.png" alt="Vines" class="vines-decoration-tiny" style="top: 80px; right: 50px; transform: rotate(25deg);">
+        <img src="img3.png" alt="Vines" class="vines-decoration-small" style="bottom: 120px; left: 30px; transform: rotate(-25deg) scaleX(-1);">
+
         <div class="max-w-3xl mx-auto">
             <div class="text-center mb-10">
                 <h2 class="text-5xl font-light text-gray-800 mb-3" style="font-family: 'Playfair Display', serif; font-style: italic; letter-spacing: -0.02em;">Wishing Well</h2>
@@ -905,29 +960,17 @@
     </section>
 
     <!-- Unplugged Ceremony Section -->
-    <section id="unplugged" class="py-14 bg-white px-4 sm:px-6 lg:px-8">
+    <section id="unplugged" class="py-14 bg-white px-4 sm:px-6 lg:px-8 relative">
+        <img src="img3.png" alt="Vines" class="vines-decoration-small" style="top: 60px; left: 50px; transform: rotate(-15deg);">
+        <img src="img3.png" alt="Vines" class="vines-decoration-tiny" style="bottom: 100px; right: 40px; transform: rotate(30deg) scaleX(-1);">
+
         <div class="max-w-3xl mx-auto">
             <div class="text-center mb-10">
                 <h2 class="text-5xl font-light text-gray-800 mb-3" style="font-family: 'Playfair Display', serif; font-style: italic; letter-spacing: -0.02em;">Unplugged Ceremony</h2>
                 <div class="w-16 h-px bg-emerald-400 mx-auto"></div>
             </div>
             <div class="bg-gray-50 rounded-xl shadow-md p-10 border border-gray-100">
-                <p class="text-center text-gray-700 text-base leading-relaxed italic font-light" style="letter-spacing: 0.01em;">We have invited a team to help us capture this day so just be present and keep our ceremony camera free just until we say <span class="font-semibold text-gray-800">"I Do"</span></p>
-            </div>
-        </div>
-    </section>
-
-    <!-- RSVP Section -->
-    <section id="rsvp" class="py-14 bg-gray-50 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto">
-            <div class="text-center mb-10">
-                <h2 class="text-5xl font-light text-gray-800 mb-3" style="font-family: 'Playfair Display', serif; font-style: italic; letter-spacing: -0.02em;">RSVP</h2>
-                <div class="w-16 h-px bg-emerald-400 mx-auto"></div>
-            </div>
-            <div class="bg-white rounded-xl shadow-md p-10 border border-gray-100">
-                <div class="space-y-5 text-center">
-                    <p class="text-gray-700 text-base italic font-light" style="letter-spacing: 0.01em;">We have reserved <span class="font-semibold text-gray-800">_____</span> seat/s</p>
-                    <div class="border-t border-gray-200 pt-5">
+                <p class="text-center text-gray-700 text-base leading-relaxed italic font-light" style="letter-spacing: 0.01em;">We have invited a team to help us capture this day so just
                         <p class="text-gray-700 text-base italic font-light" style="letter-spacing: 0.01em;">The favor of your reply is requested on or before <span class="font-semibold text-gray-800">November 29, 2025</span></p>
                     </div>
                     <div class="border-t border-gray-200 pt-5">
@@ -939,7 +982,10 @@
     </section>
 
     <!-- Reminders Section -->
-    <section id="reminders" class="py-14 bg-white px-4 sm:px-6 lg:px-8">
+    <section id="reminders" class="py-14 bg-white px-4 sm:px-6 lg:px-8 relative">
+        <img src="img3.png" alt="Vines" class="vines-decoration-small" style="top: 80px; right: 60px; transform: rotate(-25deg);">
+        <img src="img3.png" alt="Vines" class="vines-decoration-tiny" style="bottom: 120px; left: 40px; transform: rotate(35deg) scaleX(-1);">
+
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-5xl font-light text-gray-800 mb-3" style="font-family: 'Playfair Display', serif; font-style: italic; letter-spacing: -0.02em;">Reminders</h2>
@@ -963,118 +1009,131 @@
     </section>
 
     <script>
-        // Envelope Entry Logic
-        const envelope = document.getElementById('envelope');
-        const envelopeContainer = document.getElementById('envelopeContainer');
-        const bgMusic = document.getElementById('bgMusic');
-        const musicControl = document.getElementById('musicControl');
-        let musicPlaying = false;
-
-        function openEnvelope() {
-            envelope.classList.add('opening');
-            envelopeContainer.classList.add('opened');
-            
-            const playPromise = bgMusic.play();
-            if (playPromise !== undefined) {
-                playPromise
-                    .then(() => {
-                        musicPlaying = true;
-                        musicControl.classList.add('playing');
-                    })
-                    .catch(err => console.log('Music play failed:', err));
+        // Wait for DOM to load before initializing
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Sakura Effect with custom settings
+            if (typeof Sakura !== 'undefined') {
+                new Sakura({
+                    quantity: 20,
+                    speed: 1.5,
+                    opacity: 0.6,
+                    size: 15
+                });
             }
 
-            setTimeout(() => {
-                envelopeContainer.classList.add('hidden');
-                musicControl.classList.add('visible');
-            }, 1400);
-        }
+            // Envelope Entry Logic
+            const envelope = document.getElementById('envelope');
+            const envelopeContainer = document.getElementById('envelopeContainer');
+            const bgMusic = document.getElementById('bgMusic');
+            const musicControl = document.getElementById('musicControl');
+            let musicPlaying = false;
 
-        envelope.addEventListener('click', openEnvelope);
-
-        document.addEventListener('keydown', function(e) {
-            if ((e.key === 'Enter' || e.key === ' ') && !envelopeContainer.classList.contains('hidden')) {
-                e.preventDefault();
-                openEnvelope();
-            }
-        });
-
-        musicControl.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (musicPlaying) {
-                bgMusic.pause();
-                musicControl.classList.remove('playing');
-                musicPlaying = false;
-            } else {
-                bgMusic.play()
-                    .then(() => {
-                        musicControl.classList.add('playing');
-                        musicPlaying = true;
-                    })
-                    .catch(err => console.log('Music play failed:', err));
-            }
-        });
-
-        // Menu functionality - IMPROVED
-        const menuBtn = document.getElementById('menuBtn');
-        const closeBtn = document.getElementById('closeBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const mobileOverlay = document.getElementById('mobileOverlay');
-        const menuLinks = document.querySelectorAll('#mobileMenu a[href^="#"]');
-
-        function openMenu() {
-            mobileMenu.classList.remove('hidden');
-            mobileOverlay.classList.remove('hidden');
-            setTimeout(() => {
-                mobileMenu.classList.remove('-translate-x-full');
-                mobileOverlay.classList.add('opacity-100');
-            }, 10);
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMenu() {
-            mobileMenu.classList.add('-translate-x-full');
-            mobileOverlay.classList.remove('opacity-100');
-            document.body.style.overflow = 'auto';
-            setTimeout(() => {
-                mobileMenu.classList.add('hidden');
-                mobileOverlay.classList.add('hidden');
-            }, 300);
-        }
-
-        // Handle menu link clicks - scroll and close
-        menuLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
+            function openEnvelope() {
+                envelope.classList.add('opening');
+                envelopeContainer.classList.add('opened');
                 
-                const targetId = this.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-                
-                if (targetElement) {
-                    // Close menu first
-                    closeMenu();
-                    
-                    // Then scroll to target after menu closes
-                    setTimeout(() => {
-                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 300);
+                const playPromise = bgMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            musicPlaying = true;
+                            musicControl.classList.add('playing');
+                        })
+                        .catch(err => console.log('Music play failed:', err));
+                }
+
+                setTimeout(() => {
+                    envelopeContainer.classList.add('hidden');
+                    musicControl.classList.add('visible');
+                }, 1400);
+            }
+
+            envelope.addEventListener('click', openEnvelope);
+
+            document.addEventListener('keydown', function(e) {
+                if ((e.key === 'Enter' || e.key === ' ') && !envelopeContainer.classList.contains('hidden')) {
+                    e.preventDefault();
+                    openEnvelope();
                 }
             });
-        });
 
-        menuBtn.addEventListener('click', openMenu);
-        
-        if (closeBtn) {
-            closeBtn.addEventListener('click', function(e) {
+            musicControl.addEventListener('click', function(e) {
                 e.stopPropagation();
-                closeMenu();
+                if (musicPlaying) {
+                    bgMusic.pause();
+                    musicControl.classList.remove('playing');
+                    musicPlaying = false;
+                } else {
+                    bgMusic.play()
+                        .then(() => {
+                            musicControl.classList.add('playing');
+                            musicPlaying = true;
+                        })
+                        .catch(err => console.log('Music play failed:', err));
+                }
             });
-        }
-        
-        mobileOverlay.addEventListener('click', function(e) {
-            if (e.target === mobileOverlay) {
-                closeMenu();
+
+            // Menu functionality - IMPROVED
+            const menuBtn = document.getElementById('menuBtn');
+            const closeBtn = document.getElementById('closeBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const menuLinks = document.querySelectorAll('#mobileMenu a[href^="#"]');
+
+            function openMenu() {
+                mobileMenu.classList.remove('hidden');
+                mobileOverlay.classList.remove('hidden');
+                setTimeout(() => {
+                    mobileMenu.classList.remove('-translate-x-full');
+                    mobileOverlay.classList.add('opacity-100');
+                }, 10);
+                document.body.style.overflow = 'hidden';
             }
+
+            function closeMenu() {
+                mobileMenu.classList.add('-translate-x-full');
+                mobileOverlay.classList.remove('opacity-100');
+                document.body.style.overflow = 'auto';
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                    mobileOverlay.classList.add('hidden');
+                }, 300);
+            }
+
+            // Handle menu link clicks - scroll and close
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        // Close menu first
+                        closeMenu();
+                        
+                        // Then scroll to target after menu closes
+                        setTimeout(() => {
+                            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 300);
+                    }
+                });
+            });
+
+            menuBtn.addEventListener('click', openMenu);
+            
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    closeMenu();
+                });
+            }
+            
+            mobileOverlay.addEventListener('click', function(e) {
+                if (e.target === mobileOverlay) {
+                    closeMenu();
+                }
+            });
         });
     </script>
 </body>
